@@ -20,16 +20,16 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > /home/heigo/.kube/config.github
+          chmod 600 $HOME/.kube/config.github
+          
           
       - name: Verify cluster access
         run: |
-          kubectl cluster-info
-          kubectl get nodes
+          kubectl --kubeconfig /home/heigo/.kube/config.github cluster-info
+          kubectl --kubeconfig /home/heigo/.kube/config.github get nodes
            
       - name: Deploy app
         run: |
-          kubectl apply -f kubernetes/redis
-          kubectl apply -f kubernetes/frontend
+          kubectl --kubeconfig /home/heigo/.kube/config.github apply -f kubernetes/redis
+          kubectl --kubeconfig /home/heigo/.kube/config.github apply -f kubernetes/frontend
