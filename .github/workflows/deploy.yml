@@ -21,7 +21,12 @@ jobs:
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+          
+      - name: Verify cluster access
+        run: |
+          sudo kubectl get nodes        
 
       - name: Deploy app
         run: |
